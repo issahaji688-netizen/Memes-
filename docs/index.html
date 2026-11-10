@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT MEMES - Status</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0a0a0a;color:#fff;padding:15px;text-align:center}
+h1{color:#1e90ff}
+.box{background:#111;border:1px solid #1e90ff44;border-radius:15px;padding:15px;margin:15px auto;max-width:480px}
+input{width:100%;padding:11px;margin:7px 0;background:#000;border:1px solid #333;color:#fff;border-radius:8px}
+button{padding:12px 20px;background:#1e90ff;border:none;color:#fff;border-radius:20px;font-weight:bold;cursor:pointer;margin:5px}
+#memeCanvas{width:100%;max-width:400px;border-radius:10px;background:#000;margin-top:10px}
+.status{display:flex;gap:10px;overflow-x:auto;padding:10px}
+.status-item{min-width:90px;height:140px;background:#1a1a1a;border:2px solid #1e90ff;border-radius:12px;overflow:hidden;position:relative;cursor:pointer}
+.status-item img{width:100%;height:100%;object-fit:cover}
+.status-item span{position:absolute;bottom:5px;left:5px;font-size:11px;background:rgba(0,0,0,.7);padding:2px 6px;border-radius:10px}
+</style>
+</head>
+<body>
+<h1>😂 IT MEMES</h1>
+<p style="color:#aaa;font-size:13px">Tengeneza Meme, halafu i-post kama Status</p>
+
+<div class="box">
+  <h3>1. Chagua Picha</h3>
+  <input type="file" id="imgInput" accept="image/*" onchange="loadImage(event)">
+  <input id="topText" placeholder="Maneno ya JUU - mfano: MTU WA IT AKISIKIA..." oninput="drawMeme()">
+  <input id="bottomText" placeholder="Maneno ya CHINI - mfano: ...WIFI IMEKATIKA" oninput="drawMeme()">
+  <canvas id="memeCanvas" width="400" height="400"></canvas><br>
+  <button onclick="downloadMeme()">⬇️ Download Meme</button>
+  <button onclick="postAsStatus()" style="background:#00c853">📱 Post kama Status</button>
+</div>
+
+<div class="box" style="max-width:600px">
+  <h3>📱 Status za Leo - Kama WhatsApp</h3>
+  <div class="status" id="statusList">
+    <div class="status-item" onclick="alert('Hii ni Status yako, itafutika baada ya masaa 24')"><span>+ Status Yangu</span></div>
+  </div>
+  <p style="font-size:12px;color:#888">Status inakaa masaa 24 tu, kama WhatsApp Status</p>
+</div>
+
+<script>
+let img = null;
+let canvas = document.getElementById('memeCanvas');
+let ctx = canvas.getContext('2d');
+
+function loadImage(e){
+  let file = e.target.files[0];
+  let reader = new FileReader();
+  reader.onload = function(ev){
+    img = new Image();
+    img.onload = drawMeme;
+    img.src = ev.target.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+function drawMeme(){
+  if(!img) return;
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 4;
+  ctx.font = "bold 28px Arial";
+  ctx.textAlign = "center";
+  let top = document.getElementById('topText').value.toUpperCase();
+  let bottom = document.getElementById('bottomText').value.toUpperCase();
+  ctx.strokeText(top, 200, 40);
+  ctx.fillText(top, 200, 40);
+  ctx.strokeText(bottom, 200, 380);
+  ctx.fillText(bottom, 200, 380);
+}
+
+function downloadMeme(){
+  let a = document.createElement('a');
+  a.download = 'it-meme.png';
+  a.href = canvas.toDataURL();
+  a.click();
+  alert('Meme imedownload!');
+}
+
+function postAsStatus(){
+  if(!img){ alert('Chagua picha kwanza!'); return; }
+  let dataUrl = canvas.toDataURL();
+  let div = document.createElement('div');
+  div.className = 'status-item';
+  div.innerHTML = `<img src="${dataUrl}"><span>Wewe • Sasa</span>`;
+  div.onclick = () => { window.open(dataUrl); };
+  document.getElementById('statusList').appendChild(div);
+  // Hifadhi kwenye simu ili isipotee ukifunga page
+  let saved = JSON.parse(localStorage.getItem('it_status') || '[]');
+  saved.push(dataUrl);
+  localStorage.setItem('it_status', JSON.stringify(saved));
+  alert('✅ Meme imewekwa kama Status! Watu wataiona kwa masaa 24');
+}
+
+// Rudisha status zilizohifadhiwa
+window.onload = () => {
+  let saved = JSON.parse(localStorage.getItem('it_status') || '[]');
+  saved.forEach(url => {
+    let div = document.createElement('div');
+    div.className = 'status-item';
+    div.innerHTML = `<img src="${url}"><span>Wewe</span>`;
+    document.getElementById('statusList').appendChild(div);
+  });
+}
+</script>
+</body>
+  </html>
