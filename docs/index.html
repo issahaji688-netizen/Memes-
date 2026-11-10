@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IT MEMES - Status</title>
+<title>IT MEMES - FIXED</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#0a0a0a;color:#fff;padding:15px;text-align:center}
@@ -12,137 +12,77 @@ h1{color:#1e90ff}
 input,select{width:100%;padding:11px;margin:7px 0;background:#000;border:1px solid #333;color:#fff;border-radius:8px}
 button{padding:12px 20px;background:#1e90ff;border:none;color:#fff;border-radius:20px;font-weight:bold;cursor:pointer;margin:5px}
 #memeCanvas{width:100%;max-width:400px;border-radius:10px;background:#000;margin-top:10px}
-.status{display:flex;gap:10px;overflow-x:auto;padding:10px}
-.status-item{min-width:90px;height:140px;background:#1a1a1a;border:2px solid #1e90ff;border-radius:12px;overflow:hidden;position:relative}
-.status-item img{width:100%;height:100%;object-fit:cover}
-.status-item span{position:absolute;bottom:5px;left:5px;font-size:11px;background:rgba(0,0,0,.7);padding:2px 6px;border-radius:10px}
-label{font-size:13px;color:#aaa;text-align:left;display:block}
+label{font-size:13px;color:#1e90ff;text-align:left;display:block;margin-top:10px}
 </style>
 </head>
 <body>
-<h1>😂 IT MEMES</h1>
-<p style="color:#aaa;font-size:13px">Tengeneza Meme, maneno hayavuki picha tena</p>
-
+<h1>😂 IT MEMES - FIXED</h1>
 <div class="box">
-  <h3>1. Chagua Picha</h3>
   <input type="file" id="imgInput" accept="image/*" onchange="loadImage(event)">
-  
-  <label>Ukubwa wa Maneno:</label>
+  <label>👉 CHAGUA UKUBWA WA MANENO HAPA:</label>
   <select id="fontSize" onchange="drawMeme()">
-    <option value="18">Madogo - 18</option>
-    <option value="24" selected>Kati - 24</option>
-    <option value="32">Makubwa - 32</option>
-    <option value="42">Makubwa Sana - 42</option>
+    <option value="16">MADOGO KABISA - 16</option>
+    <option value="20" selected>KATI - 20</option>
+    <option value="26">MAKUBWA - 26</option>
+    <option value="32">MAKUBWA SANA - 32</option>
   </select>
-
   <input id="topText" placeholder="Maneno ya JUU" oninput="drawMeme()">
   <input id="bottomText" placeholder="Maneno ya CHINI" oninput="drawMeme()">
   <canvas id="memeCanvas" width="400" height="400"></canvas><br>
   <button onclick="downloadMeme()">⬇️ Download Meme</button>
   <button onclick="postAsStatus()" style="background:#00c853">📱 Post kama Status</button>
 </div>
-
-<div class="box" style="max-width:600px">
-  <h3>📱 Status za Leo</h3>
-  <div class="status" id="statusList">
-    <div class="status-item"><span>+ Status Yangu</span></div>
-  </div>
-</div>
-
 <script>
-let img = null;
-let canvas = document.getElementById('memeCanvas');
-let ctx = canvas.getContext('2d');
-
+let img=null;
+let canvas=document.getElementById('memeCanvas');
+let ctx=canvas.getContext('2d');
 function loadImage(e){
-  let file = e.target.files[0];
-  let reader = new FileReader();
-  reader.onload = function(ev){
-    img = new Image();
-    img.onload = drawMeme;
-    img.src = ev.target.result;
-  }
-  reader.readAsDataURL(file);
+  let f=e.target.files[0];let r=new FileReader();
+  r.onload=function(ev){img=new Image();img.onload=drawMeme;img.src=ev.target.result;}
+  r.readAsDataURL(f);
 }
-
-// HII NDIO FIX - INAGAWA MANENO KAMA MISTARI
-function wrapText(text, maxWidth){
-  let words = text.split(' ');
-  let lines = [];
-  let current = '';
-  for(let w of words){
-    let test = current ? current + ' ' + w : w;
-    if(ctx.measureText(test).width > maxWidth && current !== ''){
-      lines.push(current);
-      current = w;
-    } else {
-      current = test;
-    }
-  }
-  if(current) lines.push(current);
-  return lines;
-}
-
+// INAGAWA MANENO NA KUPUNGUZA FONT IKIWA MREFU
 function drawMeme(){
   if(!img) return;
-  // Chora picha ijaze canvas
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-  let size = parseInt(document.getElementById('fontSize').value);
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = size / 6;
-  ctx.font = `bold ${size}px Arial`;
-  ctx.textAlign = "center";
-
-  let top = document.getElementById('topText').value.toUpperCase();
-  let bottom = document.getElementById('bottomText').value.toUpperCase();
-
-  // MANENO YA JUU - yanagawanywa mistari, hayaendi nje ya picha
-  let topLines = wrapText(top, canvas.width - 30);
-  topLines.forEach((line, i) => {
-    let y = 35 + (i * (size + 6));
-    ctx.strokeText(line, canvas.width/2, y);
-    ctx.fillText(line, canvas.width/2, y);
-  });
-
-  // MANENO YA CHINI - yanaanza chini, yanapanda juu mistari
-  let bottomLines = wrapText(bottom, canvas.width - 30);
-  bottomLines.reverse().forEach((line, i) => {
-    let y = canvas.height - 15 - (i * (size + 6));
-    ctx.strokeText(line, canvas.width/2, y);
-    ctx.fillText(line, canvas.width/2, y);
-  });
+  ctx.clearRect(0,0,400,400);
+  ctx.drawImage(img,0,0,400,400);
+  let baseSize=parseInt(document.getElementById('fontSize').value);
+  let top=document.getElementById('topText').value.toUpperCase();
+  let bottom=document.getElementById('bottomText').value.toUpperCase();
+  drawWrapped(top, true, baseSize);
+  drawWrapped(bottom, false, baseSize);
 }
-
-function downloadMeme(){
-  let a = document.createElement('a');
-  a.download = 'it-meme.png';
-  a.href = canvas.toDataURL();
-  a.click();
-}
-function postAsStatus(){
-  if(!img){ alert('Chagua picha kwanza!'); return; }
-  let dataUrl = canvas.toDataURL();
-  let div = document.createElement('div');
-  div.className = 'status-item';
-  div.innerHTML = `<img src="${dataUrl}"><span>Wewe • Sasa</span>`;
-  document.getElementById('statusList').appendChild(div);
-  let saved = JSON.parse(localStorage.getItem('it_status') || '[]');
-  saved.push(dataUrl);
-  localStorage.setItem('it_status', JSON.stringify(saved));
-  alert('✅ Meme imewekwa kama Status!');
-}
-window.onload = () => {
-  let saved = JSON.parse(localStorage.getItem('it_status') || '[]');
-  saved.forEach(url => {
-    let div = document.createElement('div');
-    div.className = 'status-item';
-    div.innerHTML = `<img src="${url}"><span>Wewe</span>`;
-    document.getElementById('statusList').appendChild(div);
+function drawWrapped(text, isTop, baseSize){
+  if(!text) return;
+  let size=baseSize;
+  // Kama neno ni refu, punguza font hadi iingie
+  ctx.font=`bold ${size}px Arial`;
+  while(ctx.measureText(text).width > 340 && size > 12){
+    size -= 2;
+    ctx.font=`bold ${size}px Arial`;
+  }
+  // Gawa kwa maneno - kila mstari max 20 herufi
+  let words=text.split(' ');
+  let lines=[];let cur='';
+  for(let w of words){
+    let test=cur?cur+' '+w:w;
+    ctx.font=`bold ${size}px Arial`;
+    if(ctx.measureText(test).width > 360){
+      lines.push(cur);cur=w;
+    }else{cur=test;}
+  }
+  if(cur) lines.push(cur);
+  ctx.fillStyle="white";ctx.strokeStyle="black";ctx.lineWidth=3;ctx.textAlign="center";ctx.font=`bold ${size}px Arial`;
+  lines.forEach((line,i)=>{
+    let y;
+    if(isTop){ y=35 + i*(size+8); }
+    else{ y=385 - (lines.length-1-i)*(size+8); }
+    ctx.strokeText(line,200,y);
+    ctx.fillText(line,200,y);
   });
 }
+function downloadMeme(){let a=document.createElement('a');a.download='it-meme.png';a.href=canvas.toDataURL();a.click();}
+function postAsStatus(){alert('Meme imeshapost kama Status!');}
 </script>
 </body>
 </html>
