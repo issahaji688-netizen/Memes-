@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IT MEMES - FIXED</title>
+<title>IT MEMES - Font + Colour</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#0a0a0a;color:#fff;padding:15px;text-align:center}
@@ -12,77 +12,124 @@ h1{color:#1e90ff}
 input,select{width:100%;padding:11px;margin:7px 0;background:#000;border:1px solid #333;color:#fff;border-radius:8px}
 button{padding:12px 20px;background:#1e90ff;border:none;color:#fff;border-radius:20px;font-weight:bold;cursor:pointer;margin:5px}
 #memeCanvas{width:100%;max-width:400px;border-radius:10px;background:#000;margin-top:10px}
-label{font-size:13px;color:#1e90ff;text-align:left;display:block;margin-top:10px}
+label{font-size:13px;color:#1e90ff;text-align:left;display:block;margin-top:10px;font-weight:bold}
+.row{display:flex;gap:8px}
+.row select{flex:1}
+.color-row{display:flex;gap:6px;justify-content:center;margin:8px 0;flex-wrap:wrap}
+.color-btn{width:35px;height:35px;border-radius:50%;border:3px solid #fff;cursor:pointer}
+.color-btn.active{border:3px solid #1e90ff;transform:scale(1.15)}
 </style>
 </head>
 <body>
-<h1>😂 IT MEMES - FIXED</h1>
+<h1>😂 IT MEMES</h1>
+<p style="color:#aaa;font-size:13px">Andika kama unavyotaka - ndogo inabaki ndogo, kubwa inabaki kubwa</p>
+
 <div class="box">
   <input type="file" id="imgInput" accept="image/*" onchange="loadImage(event)">
-  <label>👉 CHAGUA UKUBWA WA MANENO HAPA:</label>
-  <select id="fontSize" onchange="drawMeme()">
-    <option value="16">MADOGO KABISA - 16</option>
-    <option value="20" selected>KATI - 20</option>
-    <option value="26">MAKUBWA - 26</option>
-    <option value="32">MAKUBWA SANA - 32</option>
+
+  <label>1. CHAGUA FONT STYLE:</label>
+  <select id="fontStyle" onchange="drawMeme()">
+    <option value="Arial">Arial - Kawaida</option>
+    <option value="Impact">Impact - Ya Memes (Nzito)</option>
+    <option value="Georgia">Georgia - Nzuri</option>
+    <option value="Courier New">Courier - Kama Typewriter</option>
+    <option value="Verdana">Verdana - Safi</option>
+    <option value="Comic Sans MS">Comic - Ya Kuchekesha</option>
   </select>
-  <input id="topText" placeholder="Maneno ya JUU" oninput="drawMeme()">
-  <input id="bottomText" placeholder="Maneno ya CHINI" oninput="drawMeme()">
+
+  <label>2. CHAGUA RANGI YA MANENO:</label>
+  <div class="color-row">
+    <div class="color-btn active" style="background:#fff" onclick="setColor('#ffffff',this)"></div>
+    <div class="color-btn" style="background:#ffff00" onclick="setColor('#ffff00',this)"></div>
+    <div class="color-btn" style="background:#ff0000" onclick="setColor('#ff0000',this)"></div>
+    <div class="color-btn" style="background:#00ff00" onclick="setColor('#00ff00',this)"></div>
+    <div class="color-btn" style="background:#1e90ff" onclick="setColor('#1e90ff',this)"></div>
+    <div class="color-btn" style="background:#ff00ff" onclick="setColor('#ff00ff',this)"></div>
+    <div class="color-btn" style="background:#000000" onclick="setColor('#000000',this)"></div>
+    <div class="color-btn" style="background:#ffa500" onclick="setColor('#ffa500',this)"></div>
+  </div>
+  <p id="colorName" style="font-size:12px;color:#aaa">Rangi: Nyeupe</p>
+
+  <label>3. UKUBWA WA MANENO:</label>
+  <div class="row">
+    <select id="fontSize" onchange="drawMeme()">
+      <option value="16">Madogo - 16</option>
+      <option value="22" selected>Kati - 22</option>
+      <option value="30">Makubwa - 30</option>
+      <option value="40">Makubwa Sana - 40</option>
+    </select>
+    <select id="fontWeight" onchange="drawMeme()">
+      <option value="normal">Nyepesi</option>
+      <option value="bold" selected>Nzito (Bold)</option>
+    </select>
+  </div>
+
+  <input id="topText" placeholder="Maneno ya JUU - andika hapa" oninput="drawMeme()">
+  <input id="bottomText" placeholder="Maneno ya CHINI - andika hapa" oninput="drawMeme()">
+
   <canvas id="memeCanvas" width="400" height="400"></canvas><br>
   <button onclick="downloadMeme()">⬇️ Download Meme</button>
   <button onclick="postAsStatus()" style="background:#00c853">📱 Post kama Status</button>
 </div>
+
 <script>
 let img=null;
 let canvas=document.getElementById('memeCanvas');
 let ctx=canvas.getContext('2d');
+let selectedColor='#ffffff';
+let colorNames={'#ffffff':'Nyeupe','#ffff00':'Njano','#ff0000':'Nyekundu','#00ff00':'Kijani','#1e90ff':'Bluu','#ff00ff':'Pinki','#000000':'Nyeusi','#ffa500':'Chungwa'};
+
+function setColor(c, el){
+  selectedColor=c;
+  document.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('colorName').innerText='Rangi: '+colorNames[c];
+  drawMeme();
+}
+
 function loadImage(e){
   let f=e.target.files[0];let r=new FileReader();
   r.onload=function(ev){img=new Image();img.onload=drawMeme;img.src=ev.target.result;}
   r.readAsDataURL(f);
 }
-// INAGAWA MANENO NA KUPUNGUZA FONT IKIWA MREFU
+
 function drawMeme(){
   if(!img) return;
   ctx.clearRect(0,0,400,400);
   ctx.drawImage(img,0,0,400,400);
-  let baseSize=parseInt(document.getElementById('fontSize').value);
-  let top=document.getElementById('topText').value.toUpperCase();
-  let bottom=document.getElementById('bottomText').value.toUpperCase();
-  drawWrapped(top, true, baseSize);
-  drawWrapped(bottom, false, baseSize);
+  // HATUBADILISHI HERUFI - TUNACHUKUA KAMA UMEANDIKA
+  let top=document.getElementById('topText').value;
+  let bottom=document.getElementById('bottomText').value;
+  drawWrapped(top, true);
+  drawWrapped(bottom, false);
 }
-function drawWrapped(text, isTop, baseSize){
+
+function drawWrapped(text, isTop){
   if(!text) return;
-  let size=baseSize;
-  // Kama neno ni refu, punguza font hadi iingie
-  ctx.font=`bold ${size}px Arial`;
+  let size=parseInt(document.getElementById('fontSize').value);
+  let family=document.getElementById('fontStyle').value;
+  let weight=document.getElementById('fontWeight').value;
+  // Kama maneno marefu, punguza font yenyewe
+  ctx.font=`${weight} ${size}px ${family}`;
   while(ctx.measureText(text).width > 340 && size > 12){
-    size -= 2;
-    ctx.font=`bold ${size}px Arial`;
+    size-=2; ctx.font=`${weight} ${size}px ${family}`;
   }
-  // Gawa kwa maneno - kila mstari max 20 herufi
   let words=text.split(' ');
   let lines=[];let cur='';
   for(let w of words){
     let test=cur?cur+' '+w:w;
-    ctx.font=`bold ${size}px Arial`;
-    if(ctx.measureText(test).width > 360){
-      lines.push(cur);cur=w;
-    }else{cur=test;}
+    ctx.font=`${weight} ${size}px ${family}`;
+    if(ctx.measureText(test).width > 360){ lines.push(cur); cur=w; } else { cur=test; }
   }
   if(cur) lines.push(cur);
-  ctx.fillStyle="white";ctx.strokeStyle="black";ctx.lineWidth=3;ctx.textAlign="center";ctx.font=`bold ${size}px Arial`;
+  // Rangi uliyochagua + outline nyeusi ili ionekane
+  ctx.fillStyle=selectedColor;
+  ctx.strokeStyle= selectedColor==='#000000' ? '#ffffff' : '#000000';
+  ctx.lineWidth=3; ctx.textAlign="center"; ctx.font=`${weight} ${size}px ${family}`;
   lines.forEach((line,i)=>{
-    let y;
-    if(isTop){ y=35 + i*(size+8); }
-    else{ y=385 - (lines.length-1-i)*(size+8); }
+    let y = isTop ? 35 + i*(size+8) : 385 - (lines.length-1-i)*(size+8);
     ctx.strokeText(line,200,y);
     ctx.fillText(line,200,y);
   });
 }
-function downloadMeme(){let a=document.createElement('a');a.download='it-meme.png';a.href=canvas.toDataURL();a.click();}
-function postAsStatus(){alert('Meme imeshapost kama Status!');}
-</script>
-</body>
-</html>
+function downloadMeme(){let a=document.createElement('a');
